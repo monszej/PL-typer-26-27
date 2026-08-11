@@ -7,7 +7,7 @@ from scoring import points
 
 conn=get_conn()
 st.set_page_config(page_title='Premier League Typer',layout='wide')
-st.title('⚽ Premier League Typer 25/26')
+st.title('⚽ Premier League Typer 26/27')
 
 menu=st.sidebar.radio('Menu',['Typowanie','Ranking'])
 user=st.sidebar.text_input('Nick')
