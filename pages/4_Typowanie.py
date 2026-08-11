@@ -21,7 +21,7 @@ if not matches:
     st.warning("Brak meczów do wyświetlenia.")
     st.stop()
 
-for match in matches[:20]:
+for match in matches:
 
     match_id = match["id"]
 
