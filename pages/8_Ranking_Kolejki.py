@@ -9,14 +9,12 @@ st.title("🏆 Ranking Kolejki")
 
 conn = get_conn()
 
-# Pobierz zakończone mecze
 finished_matches = get_matches("FINISHED")
 
 if len(finished_matches) == 0:
     st.info("Brak zakończonych meczów.")
     st.stop()
 
-# Lista dostępnych kolejek
 matchdays = sorted(
     list(
         set(
@@ -42,7 +40,6 @@ predictions = pd.read_sql_query(
 
 ranking = {}
 
-# Mecze wybranej kolejki
 selected_matches = [
     m
     for m in finished_matches
@@ -63,6 +60,11 @@ for _, prediction in predictions.iterrows():
     if not match:
         continue
 
+    user = prediction["username"]
+
+    if user == "admin":
+        continue
+
     real_home = match["score"]["fullTime"]["home"]
     real_away = match["score"]["fullTime"]["away"]
 
@@ -73,12 +75,7 @@ for _, prediction in predictions.iterrows():
         real_away
     )
 
-    user = prediction["username"]
-
-if user == "admin":
-    continue
-
-ranking[user] = ranking.get(user, 0) + earned
+    ranking[user] = ranking.get(user, 0) + earned
 
 if len(ranking) == 0:
 
@@ -94,10 +91,7 @@ else:
             key=lambda x: x[1],
             reverse=True
         ),
-        columns=[
-            "Gracz",
-            "Punkty"
-        ]
+        columns=["Gracz", "Punkty"]
     )
 
     ranking_df.index += 1
