@@ -1,4 +1,3 @@
-
 import streamlit as st
 from football_data import get_matches
 from database import get_conn, get_prediction
@@ -28,7 +27,7 @@ if not matches:
     st.warning("Brak meczów do wyświetlenia.")
     st.stop()
 
-# Pobranie kolejek
+# Lista kolejek
 matchdays = sorted(
     list(
         set(
@@ -64,6 +63,9 @@ for match in matches:
     home = match["homeTeam"]["shortName"]
     away = match["awayTeam"]["shortName"]
 
+    home_logo = match["homeTeam"].get("crest")
+    away_logo = match["awayTeam"].get("crest")
+
     kickoff = datetime.fromisoformat(
         match["utcDate"].replace("Z", "+00:00")
     )
@@ -84,31 +86,38 @@ for match in matches:
 
     st.divider()
 
-    home_logo = match["homeTeam"]["crest"]
-away_logo = match["awayTeam"]["crest"]
+    col_logo1, col_title, col_logo2 = st.columns(
+        [1, 4, 1]
+    )
 
-col_logo1, col_title, col_logo2 = st.columns([1, 4, 1])
+    with col_logo1:
+        if home_logo:
+            st.image(home_logo, width=70)
 
-with col_logo1:
-    st.image(home_logo, width=70)
+    with col_title:
+        st.subheader(
+            f"{home} vs {away}"
+        )
 
-with col_title:
-    st.subheader(f"{home} vs {away}")
-
-with col_logo2:
-    st.image(away_logo, width=70)
+    with col_logo2:
+        if away_logo:
+            st.image(away_logo, width=70)
 
     st.caption(
-        f"🕒 Start meczu: {kickoff.strftime('%d-%m-%Y %H:%M UTC')}"
+        f"🕒 Start meczu: "
+        f"{kickoff.strftime('%d-%m-%Y %H:%M UTC')}"
     )
 
     if now > kickoff:
 
-        st.error("⛔ Typowanie zamknięte")
+        st.error(
+            "⛔ Typowanie zamknięte"
+        )
 
         if existing_prediction:
             st.info(
-                f"Twój typ: {default_home}:{default_away}"
+                f"Twój typ: "
+                f"{default_home}:{default_away}"
             )
 
         continue
@@ -152,5 +161,6 @@ with col_logo2:
         conn.commit()
 
         st.success(
-            f"✅ Zapisano typ: {home} {home_pred}:{away_pred} {away}"
+            f"✅ Zapisano typ: "
+            f"{home} {home_pred}:{away_pred} {away}"
         )
