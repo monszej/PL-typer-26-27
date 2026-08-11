@@ -75,7 +75,10 @@ for _, prediction in predictions.iterrows():
 
     user = prediction["username"]
 
-    ranking[user] = ranking.get(user, 0) + earned
+if user == "admin":
+    continue
+
+ranking[user] = ranking.get(user, 0) + earned
 
 if len(ranking) == 0:
 
