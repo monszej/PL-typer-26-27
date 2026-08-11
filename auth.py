@@ -56,3 +56,16 @@ def get_all_users():
     conn.close()
 
     return users
+
+def delete_user(username):
+
+    conn = sqlite3.connect("typer.db")
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "DELETE FROM users WHERE username=?",
+        (username,)
+    )
+
+    conn.commit()
+    conn.close()
