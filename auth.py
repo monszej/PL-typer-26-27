@@ -69,3 +69,23 @@ def delete_user(username):
 
     conn.commit()
     conn.close()
+
+def count_user_predictions(username):
+
+    conn = sqlite3.connect("typer.db")
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT COUNT(*)
+        FROM predictions
+        WHERE username = ?
+        """,
+        (username,)
+    )
+
+    count = cursor.fetchone()[0]
+
+    conn.close()
+
+    return count
