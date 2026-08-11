@@ -1,20 +1,20 @@
 import streamlit as st
 from football_data import get_matches
-from database import get_conn
+from database import get_conn, get_prediction
 from datetime import datetime, timezone
 
 st.title("⚽ Typowanie")
 
-# Sprawdzenie logowania
 if "username" not in st.session_state:
     st.warning("Najpierw się zaloguj.")
     st.stop()
 
-st.success(f"Zalogowano jako: {st.session_state.username}")
+username = st.session_state.username
+
+st.success(f"Zalogowano jako: {username}")
 
 conn = get_conn()
 
-# Pobranie nadchodzących meczów
 matches = get_matches("SCHEDULED")
 
 if not matches:
@@ -34,6 +34,21 @@ for match in matches[:20]:
 
     now = datetime.now(timezone.utc)
 
+    existing_prediction = get_prediction(
+        username,
+        match_id
+    )
+
+    if existing_prediction:
+
+        default_home = existing_prediction[0]
+        default_away = existing_prediction[1]
+
+    else:
+
+        default_home = 0
+        default_away = 0
+
     st.divider()
 
     st.subheader(f"{home} vs {away}")
@@ -42,9 +57,15 @@ for match in matches[:20]:
         f"Start meczu: {kickoff.strftime('%d-%m-%Y %H:%M UTC')}"
     )
 
-    # Jeżeli mecz już się rozpoczął
     if now > kickoff:
+
         st.error("⛔ Typowanie zamknięte")
+
+        if existing_prediction:
+            st.info(
+                f"Twój typ: {default_home}:{default_away}"
+            )
+
         continue
 
     col1, col2 = st.columns(2)
@@ -53,7 +74,7 @@ for match in matches[:20]:
         home,
         min_value=0,
         max_value=20,
-        value=0,
+        value=default_home,
         key=f"home_{match_id}"
     )
 
@@ -61,7 +82,7 @@ for match in matches[:20]:
         away,
         min_value=0,
         max_value=20,
-        value=0,
+        value=default_away,
         key=f"away_{match_id}"
     )
 
@@ -76,7 +97,7 @@ for match in matches[:20]:
             VALUES (?, ?, ?, ?)
             """,
             (
-                st.session_state.username,
+                username,
                 match_id,
                 home_pred,
                 away_pred
