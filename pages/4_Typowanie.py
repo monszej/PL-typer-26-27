@@ -1,3 +1,4 @@
+st.write(match["homeTeam"])
 import streamlit as st
 from football_data import get_matches
 from database import get_conn, get_prediction
