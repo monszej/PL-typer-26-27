@@ -25,11 +25,17 @@ for match in matches[:20]:
     home = match["homeTeam"]["shortName"]
     away = match["awayTeam"]["shortName"]
 
-    kickoff = match["utcDate"]
+    from datetime import datetime, timezone
 
-    st.subheader(f"{home} vs {away}")
+kickoff = datetime.fromisoformat(
+    match["utcDate"].replace("Z", "+00:00")
+)
 
-    st.caption(f"Start: {kickoff}")
+now = datetime.now(timezone.utc)
+
+st.subheader(f"{home} vs {away}")
+
+st.caption(f"Start: {kickoff}")
 
     col1, col2 = st.columns(2)
 
@@ -47,7 +53,30 @@ for match in matches[:20]:
         key=f"away_{match_id}"
     )
 
+    if now > kickoff:
+
+    st.error("⛔ Typowanie zamknięte")
+
+else:
+
     if st.button(f"Zapisz typ {match_id}"):
+
+        conn.execute(
+            """
+            INSERT OR REPLACE INTO predictions
+            VALUES (?, ?, ?, ?)
+            """,
+            (
+                st.session_state.username,
+                match_id,
+                home_pred,
+                away_pred
+            )
+        )
+
+        conn.commit()
+
+        st.success("✅ Typ zapisany")
 
         conn.execute(
             """
