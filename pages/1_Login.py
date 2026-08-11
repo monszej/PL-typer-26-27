@@ -21,6 +21,8 @@ create_users_table()
 # Administrator
 add_user("admin", "admin123", 1)
 
+st.title("🔐 Logowanie")
+
 # Automatyczne logowanie z cookie
 if cookies.get("username"):
 
@@ -28,40 +30,41 @@ if cookies.get("username"):
     st.session_state.username = cookies["username"]
 
     st.success(
-        f"✅ Automatycznie zalogowano jako {cookies['username']}"
+        f"✅ Aktualnie zalogowany: {cookies['username']}"
     )
 
-    st.stop()
+    col1, col2 = st.columns(2)
 
-st.title("🔐 Logowanie")
+    with col1:
+
+        if st.button("🚪 Wyloguj"):
+
+            del cookies["username"]
+
+            cookies.save()
+
+            st.session_state.clear()
+
+            st.rerun()
+
+    with col2:
+
+        if st.button("👤 Zaloguj na inne konto"):
+
+            del cookies["username"]
+
+            cookies.save()
+
+            st.session_state.clear()
+
+            st.rerun()
+
+    st.divider()
+
+st.subheader("Logowanie")
 
 username = st.text_input("Użytkownik")
+
 password = st.text_input(
     "Hasło",
-    type="password"
-)
-
-if st.button("Zaloguj"):
-
-    if verify_user(
-        username,
-        password
-    ):
-
-        st.session_state.logged_in = True
-        st.session_state.username = username
-
-        cookies["username"] = username
-        cookies.save()
-
-        st.success(
-            f"Witaj {username}"
-        )
-
-        st.rerun()
-
-    else:
-
-        st.error(
-            "Błędny login lub hasło"
-        )
+    type="
