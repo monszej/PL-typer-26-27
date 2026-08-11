@@ -1,6 +1,5 @@
 
 import streamlit as st
-st.write(match["homeTeam"])
 from football_data import get_matches
 from database import get_conn, get_prediction
 from datetime import datetime, timezone
