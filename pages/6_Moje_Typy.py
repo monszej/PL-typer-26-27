@@ -11,19 +11,24 @@ if "username" not in st.session_state:
 
 conn = get_conn()
 
-query = """
-SELECT *
-FROM predictions
-WHERE username = ?
-"""
-
 df = pd.read_sql_query(
-    query,
+    """
+    SELECT
+        match_id,
+        home_pred,
+        away_pred
+    FROM predictions
+    WHERE username = ?
+    ORDER BY match_id
+    """,
     conn,
     params=(st.session_state.username,)
 )
 
-st.dataframe(
-    df,
-    use_container_width=True
-)
+if len(df) == 0:
+    st.info("Nie zapisano jeszcze żadnych typów.")
+else:
+    st.dataframe(
+        df,
+        use_container_width=True
+    )
