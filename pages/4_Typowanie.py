@@ -27,7 +27,7 @@ if not matches:
     st.warning("Brak meczów do wyświetlenia.")
     st.stop()
 
-# Lista kolejek
+# Pobranie kolejek
 matchdays = sorted(
     list(
         set(
@@ -42,9 +42,8 @@ if not matchdays:
     st.warning("Nie znaleziono kolejek.")
     st.stop()
 
-# Najbliższa kolejka jako domyślna
 selected_matchday = st.selectbox(
-    "Wybierz kolejkę",
+    "🏆 Wybierz kolejkę",
     matchdays,
     index=0
 )
@@ -84,10 +83,10 @@ for match in matches:
 
     st.divider()
 
-    st.subheader(f"{home} vs {away}")
+    st.subheader(f"⚽ {home} vs {away}")
 
     st.caption(
-        f"Start meczu: {kickoff.strftime('%d-%m-%Y %H:%M UTC')}"
+        f"🕒 Start meczu: {kickoff.strftime('%d-%m-%Y %H:%M UTC')}"
     )
 
     if now > kickoff:
