@@ -53,7 +53,7 @@ st.caption(f"Start: {kickoff}")
         key=f"away_{match_id}"
     )
 
-    if now > kickoff:
+   if now > kickoff:
 
     st.error("⛔ Typowanie zamknięte")
 
@@ -77,20 +77,3 @@ else:
         conn.commit()
 
         st.success("✅ Typ zapisany")
-
-        conn.execute(
-            """
-            INSERT OR REPLACE INTO predictions
-            VALUES (?, ?, ?, ?)
-            """,
-            (
-                st.session_state.username,
-                match_id,
-                home_pred,
-                away_pred
-            )
-        )
-
-        conn.commit()
-
-        st.success("Typ zapisany")
