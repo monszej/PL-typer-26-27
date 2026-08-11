@@ -5,3 +5,22 @@ def get_conn():
     conn.execute("CREATE TABLE IF NOT EXISTS users(username TEXT PRIMARY KEY,password TEXT)")
     conn.execute("CREATE TABLE IF NOT EXISTS predictions(username TEXT,match_id INTEGER,home_pred INTEGER,away_pred INTEGER,PRIMARY KEY(username,match_id))")
     return conn
+    def get_prediction(username, match_id):
+
+    cursor = get_conn().cursor()
+
+    cursor.execute(
+        """
+        SELECT home_pred, away_pred
+        FROM predictions
+        WHERE username=? AND match_id=?
+        """,
+        (username, match_id)
+    )
+
+    result = cursor.fetchone()
+
+    if result:
+        return result
+
+    return None
