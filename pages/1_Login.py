@@ -3,8 +3,8 @@ from streamlit_cookies_manager import EncryptedCookieManager
 
 from auth import (
     create_users_table,
-    add_user,
-    verify_user
+    verify_user,
+    ensure_admin_exists
 )
 
 # Cookies
@@ -17,9 +17,10 @@ if not cookies.ready():
     st.stop()
 
 create_users_table()
+ensure_admin_exists()
 
 # Administrator
-add_user("admin", "admin123", 1)
+
 
 st.title("🔐 Logowanie")
 
