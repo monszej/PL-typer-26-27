@@ -37,12 +37,16 @@ for _, prediction in predictions.iterrows():
 
     user = prediction["username"]
 
-    earned_points = points(
-        prediction["home_pred"],
-        prediction["away_pred"],
-        real_home,
-        real_away
-    )
+if user == "admin":
+    continue
+
+earned_points = points(
+    prediction["home_pred"],
+    prediction["away_pred"],
+    real_home,
+    real_away
+)
+    
 
     if user not in ranking:
 
