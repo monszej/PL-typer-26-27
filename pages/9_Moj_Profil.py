@@ -1,9 +1,18 @@
 import streamlit as st
+from streamlit_cookies_manager import EncryptedCookieManager
 
 from auth import (
     verify_user,
     change_password
 )
+
+cookies = EncryptedCookieManager(
+    prefix="pl_typer_",
+    password="zmien_to_na_bardzo_dlugi_losowy_ciag"
+)
+
+if not cookies.ready():
+    st.stop()
 
 st.title("👤 Mój Profil")
 
@@ -14,6 +23,8 @@ if "username" not in st.session_state:
 username = st.session_state.username
 
 st.write(f"Zalogowany użytkownik: **{username}**")
+
+st.subheader("🔒 Zmiana hasła")
 
 old_password = st.text_input(
     "Obecne hasło",
@@ -56,3 +67,22 @@ if st.button("Zmień hasło"):
         st.success(
             "✅ Hasło zostało zmienione"
         )
+
+st.divider()
+
+st.subheader("🚪 Wylogowanie")
+
+if st.button("Wyloguj"):
+
+    if cookies.get("username"):
+        del cookies["username"]
+
+    cookies.save()
+
+    st.session_state.clear()
+
+    st.success(
+        "✅ Zostałeś wylogowany"
+    )
+
+    st.rerun()
