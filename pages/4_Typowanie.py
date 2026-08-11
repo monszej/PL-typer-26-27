@@ -1,21 +1,24 @@
 import streamlit as st
 from football_data import get_matches
 from database import get_conn
+from datetime import datetime, timezone
 
 st.title("⚽ Typowanie")
 
+# Sprawdzenie logowania
 if "username" not in st.session_state:
-    st.warning("Najpierw się zaloguj")
+    st.warning("Najpierw się zaloguj.")
     st.stop()
 
-st.write(f"Zalogowano jako: **{st.session_state.username}**")
+st.success(f"Zalogowano jako: {st.session_state.username}")
 
 conn = get_conn()
 
+# Pobranie nadchodzących meczów
 matches = get_matches("SCHEDULED")
 
 if not matches:
-    st.warning("Brak meczów do wyświetlenia")
+    st.warning("Brak meczów do wyświetlenia.")
     st.stop()
 
 for match in matches[:20]:
@@ -25,41 +28,47 @@ for match in matches[:20]:
     home = match["homeTeam"]["shortName"]
     away = match["awayTeam"]["shortName"]
 
-    from datetime import datetime, timezone
+    kickoff = datetime.fromisoformat(
+        match["utcDate"].replace("Z", "+00:00")
+    )
 
-kickoff = datetime.fromisoformat(
-    match["utcDate"].replace("Z", "+00:00")
-)
+    now = datetime.now(timezone.utc)
 
-now = datetime.now(timezone.utc)
+    st.divider()
 
-st.subheader(f"{home} vs {away}")
+    st.subheader(f"{home} vs {away}")
 
-st.caption(f"Start: {kickoff}")
+    st.caption(
+        f"Start meczu: {kickoff.strftime('%d-%m-%Y %H:%M UTC')}"
+    )
+
+    # Jeżeli mecz już się rozpoczął
+    if now > kickoff:
+        st.error("⛔ Typowanie zamknięte")
+        continue
 
     col1, col2 = st.columns(2)
 
     home_pred = col1.number_input(
-        f"{home}",
+        home,
         min_value=0,
         max_value=20,
+        value=0,
         key=f"home_{match_id}"
     )
 
     away_pred = col2.number_input(
-        f"{away}",
+        away,
         min_value=0,
         max_value=20,
+        value=0,
         key=f"away_{match_id}"
     )
 
-   if now > kickoff:
-
-    st.error("⛔ Typowanie zamknięte")
-
-else:
-
-    if st.button(f"Zapisz typ {match_id}"):
+    if st.button(
+        f"Zapisz typ dla {home} vs {away}",
+        key=f"save_{match_id}"
+    ):
 
         conn.execute(
             """
@@ -76,4 +85,6 @@ else:
 
         conn.commit()
 
-        st.success("✅ Typ zapisany")
+        st.success(
+            f"✅ Zapisano typ: {home} {home_pred}:{away_pred} {away}"
+        )
