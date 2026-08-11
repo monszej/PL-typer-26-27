@@ -64,8 +64,6 @@ for match in matches:
     home = match["homeTeam"]["shortName"]
     away = match["awayTeam"]["shortName"]
 
-    st.write(match["homeTeam"])
-
     kickoff = datetime.fromisoformat(
         match["utcDate"].replace("Z", "+00:00")
     )
@@ -86,7 +84,19 @@ for match in matches:
 
     st.divider()
 
-    st.subheader(f"⚽ {home} vs {away}")
+    home_logo = match["homeTeam"]["crest"]
+away_logo = match["awayTeam"]["crest"]
+
+col_logo1, col_title, col_logo2 = st.columns([1, 4, 1])
+
+with col_logo1:
+    st.image(home_logo, width=70)
+
+with col_title:
+    st.subheader(f"{home} vs {away}")
+
+with col_logo2:
+    st.image(away_logo, width=70)
 
     st.caption(
         f"🕒 Start meczu: {kickoff.strftime('%d-%m-%Y %H:%M UTC')}"
