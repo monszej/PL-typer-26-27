@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 
 from database import get_conn
+from football_data import get_matches
 
 st.title("📝 Moje Typy")
 
@@ -9,26 +10,53 @@ if "username" not in st.session_state:
     st.warning("Najpierw się zaloguj")
     st.stop()
 
+username = st.session_state.username
+
 conn = get_conn()
 
-df = pd.read_sql_query(
+predictions = pd.read_sql_query(
     """
-    SELECT
-        match_id,
-        home_pred,
-        away_pred
+    SELECT *
     FROM predictions
     WHERE username = ?
-    ORDER BY match_id
     """,
     conn,
-    params=(st.session_state.username,)
+    params=(username,)
 )
 
-if len(df) == 0:
+matches = (
+    get_matches("SCHEDULED")
+    + get_matches("FINISHED")
+)
+
+if len(predictions) == 0:
+
     st.info("Nie zapisano jeszcze żadnych typów.")
+
 else:
-    st.dataframe(
-        df,
-        use_container_width=True
-    )
+
+    for _, row in predictions.iterrows():
+
+        match = next(
+            (
+                m
+                for m in matches
+                if m["id"] == row["match_id"]
+            ),
+            None
+        )
+
+        if match:
+
+            home = match["homeTeam"]["shortName"]
+            away = match["awayTeam"]["shortName"]
+
+            st.markdown(
+                f"""
+### ⚽ {home} vs {away}
+
+Typ: **{row['home_pred']} : {row['away_pred']}**
+"""
+            )
+
+            st.divider()
