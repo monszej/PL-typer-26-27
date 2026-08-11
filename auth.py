@@ -43,3 +43,16 @@ def verify_user(username, password):
     conn.close()
 
     return user is not None
+
+def get_all_users():
+
+    conn = sqlite3.connect("typer.db")
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT username FROM users")
+
+    users = cursor.fetchall()
+
+    conn.close()
+
+    return users
