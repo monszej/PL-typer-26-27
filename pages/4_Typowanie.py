@@ -87,7 +87,7 @@ for match in matches:
     st.divider()
 
     col_logo1, col_title, col_logo2 = st.columns(
-        [1, 2, 1]
+        [1, 1.5, 1]
     )
 
     with col_logo1:
