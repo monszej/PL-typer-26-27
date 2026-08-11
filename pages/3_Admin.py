@@ -28,8 +28,29 @@ if st.button("Dodaj użytkownika"):
 
 from auth import get_all_users
 
+from auth import delete_user
+
 st.subheader("Użytkownicy")
 
 for user in get_all_users():
 
-    st.write(user[0])
+    username = user[0]
+
+    col1, col2 = st.columns([4, 1])
+
+    col1.write(username)
+
+    if username != "admin":
+
+        if col2.button(
+            "🗑 Usuń",
+            key=f"del_{username}"
+        ):
+
+            delete_user(username)
+
+            st.success(
+                f"Usunięto użytkownika: {username}"
+            )
+
+            st.rerun()
