@@ -11,6 +11,12 @@ if "username" not in st.session_state:
 
 username = st.session_state.username
 
+if username == "admin":
+    st.info(
+        "Konto administratora nie bierze udziału w typowaniu."
+    )
+    st.stop()
+
 st.success(f"Zalogowano jako: {username}")
 
 conn = get_conn()
@@ -20,6 +26,36 @@ matches = get_matches("SCHEDULED")
 if not matches:
     st.warning("Brak meczów do wyświetlenia.")
     st.stop()
+
+# Lista kolejek
+matchdays = sorted(
+    list(
+        set(
+            match["matchday"]
+            for match in matches
+            if match.get("matchday")
+        )
+    )
+)
+
+if not matchdays:
+    st.warning("Nie znaleziono kolejek.")
+    st.stop()
+
+# Najbliższa kolejka jako domyślna
+selected_matchday = st.selectbox(
+    "Wybierz kolejkę",
+    matchdays,
+    index=0
+)
+
+matches = [
+    match
+    for match in matches
+    if match.get("matchday") == selected_matchday
+]
+
+st.subheader(f"🏆 Kolejka {selected_matchday}")
 
 for match in matches:
 
@@ -40,12 +76,9 @@ for match in matches:
     )
 
     if existing_prediction:
-
         default_home = existing_prediction[0]
         default_away = existing_prediction[1]
-
     else:
-
         default_home = 0
         default_away = 0
 
@@ -87,7 +120,7 @@ for match in matches:
     )
 
     if st.button(
-        f"Zapisz typ dla {home} vs {away}",
+        f"💾 Zapisz typ dla {home} vs {away}",
         key=f"save_{match_id}"
     ):
 
