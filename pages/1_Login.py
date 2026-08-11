@@ -65,3 +65,28 @@ if st.button("Zaloguj"):
         st.error(
             "Błędny login lub hasło"
         )
+        from streamlit_cookies_manager import EncryptedCookieManager
+
+cookies = EncryptedCookieManager(
+    prefix="pl_typer_",
+    password="zmien_to_na_bardzo_dlugi_losowy_ciag"
+)
+
+if cookies.ready():
+
+    st.divider()
+
+    if st.button("🚪 Wyloguj"):
+
+        if "username" in cookies:
+            del cookies["username"]
+
+        cookies.save()
+
+        st.session_state.clear()
+
+        st.success(
+            "Zostałeś wylogowany."
+        )
+
+        st.rerun()
