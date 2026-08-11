@@ -64,6 +64,8 @@ for match in matches:
     home = match["homeTeam"]["shortName"]
     away = match["awayTeam"]["shortName"]
 
+    st.write(match["homeTeam"])
+
     kickoff = datetime.fromisoformat(
         match["utcDate"].replace("Z", "+00:00")
     )
