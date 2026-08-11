@@ -25,3 +25,11 @@ if st.button("Dodaj użytkownika"):
     )
 
     st.success(f"Użytkownik {new_user} został dodany.")
+
+from auth import get_all_users
+
+st.subheader("Użytkownicy")
+
+for user in get_all_users():
+
+    st.write(user[0])
