@@ -70,3 +70,43 @@ for user in get_all_users():
             )
 
             st.rerun()
+
+st.divider()
+
+st.subheader("🔐 Reset hasła użytkownika")
+
+users_list = [
+    user[0]
+    for user in get_all_users()
+    if user[0] != "admin"
+]
+
+selected_user = st.selectbox(
+    "Wybierz użytkownika",
+    users_list
+)
+
+new_password = st.text_input(
+    "Nowe hasło",
+    type="password",
+    key="reset_password"
+)
+
+if st.button("Resetuj hasło"):
+
+    if len(new_password) < 6:
+
+        st.error(
+            "Hasło musi mieć minimum 6 znaków"
+        )
+
+    else:
+
+        admin_reset_password(
+            selected_user,
+            new_password
+        )
+
+        st.success(
+            f"✅ Hasło użytkownika {selected_user} zostało zmienione"
+        )
