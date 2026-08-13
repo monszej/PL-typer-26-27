@@ -3,7 +3,8 @@ from auth import (
     add_user,
     get_all_users,
     delete_user,
-    count_user_predictions
+    count_user_predictions,
+    admin_reset_password
 )
 
 st.title("🛠️ Panel Administratora")
