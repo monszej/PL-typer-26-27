@@ -178,3 +178,22 @@ def ensure_admin_exists():
         conn.commit()
 
     conn.close()
+
+def admin_reset_password(username, new_password):
+
+    conn = sqlite3.connect("typer.db")
+    cursor = conn.cursor()
+
+    hashed = hash_password(new_password)
+
+    cursor.execute(
+        """
+        UPDATE users
+        SET password = ?
+        WHERE username = ?
+        """,
+        (hashed, username)
+    )
+
+    conn.commit()
+    conn.close()
