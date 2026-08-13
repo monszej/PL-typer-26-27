@@ -41,7 +41,11 @@ def add_user(username, password, is_admin=0):
         INSERT OR REPLACE INTO users
         VALUES (?, ?, ?)
         """,
-        (username, hashed, is_admin)
+        (
+            username,
+            hashed,
+            is_admin
+        )
     )
 
     conn.commit()
@@ -57,7 +61,7 @@ def verify_user(username, password):
         """
         SELECT password
         FROM users
-        WHERE username=?
+        WHERE username = ?
         """,
         (username,)
     )
@@ -70,130 +74,4 @@ def verify_user(username, password):
         return False
 
     return bcrypt.checkpw(
-        password.encode(),
-        result[0].encode()
-    )
-
-
-def get_all_users():
-
-    conn = sqlite3.connect("typer.db")
-    cursor = conn.cursor()
-
-    cursor.execute(
-        "SELECT username FROM users"
-    )
-
-    users = cursor.fetchall()
-
-    conn.close()
-
-    return users
-
-
-def delete_user(username):
-
-    conn = sqlite3.connect("typer.db")
-    cursor = conn.cursor()
-
-    cursor.execute(
-        "DELETE FROM users WHERE username=?",
-        (username,)
-    )
-
-    conn.commit()
-    conn.close()
-
-
-def count_user_predictions(username):
-
-    conn = sqlite3.connect("typer.db")
-    cursor = conn.cursor()
-
-    cursor.execute(
-        """
-        SELECT COUNT(*)
-        FROM predictions
-        WHERE username=?
-        """,
-        (username,)
-    )
-
-    count = cursor.fetchone()[0]
-
-    conn.close()
-
-    return count
-
-
-def change_password(username, new_password):
-
-    conn = sqlite3.connect("typer.db")
-    cursor = conn.cursor()
-
-    hashed = hash_password(new_password)
-
-    cursor.execute(
-        """
-        UPDATE users
-        SET password=?
-        WHERE username=?
-        """,
-        (hashed, username)
-    )
-
-    conn.commit()
-    conn.close()
-def ensure_admin_exists():
-
-    conn = sqlite3.connect("typer.db")
-    cursor = conn.cursor()
-
-    cursor.execute(
-        """
-        SELECT username
-        FROM users
-        WHERE username = 'admin'
-        """
-    )
-
-    admin = cursor.fetchone()
-
-    if not admin:
-
-        hashed = hash_password("admin123")
-
-        cursor.execute(
-            """
-            INSERT INTO users
-            VALUES (?, ?, ?)
-            """,
-            (
-                "admin",
-                hashed,
-                1
-            )
-        )
-
-        conn.commit()
-
-    conn.close()
-
-def admin_reset_password(username, new_password):
-
-    conn = sqlite3.connect("typer.db")
-    cursor = conn.cursor()
-
-    hashed = hash_password(new_password)
-
-    cursor.execute(
-        """
-        UPDATE users
-        SET password = ?
-        WHERE username = ?
-        """,
-        (hashed, username)
-    )
-
-    conn.commit()
-    conn.close()
+        password
