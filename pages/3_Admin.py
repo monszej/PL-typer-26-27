@@ -9,6 +9,19 @@ from auth import (
 
 st.title("🛠️ Panel Administratora")
 
+from database import get_conn
+
+if st.button("🔧 Napraw bazę"):
+
+    conn = get_conn()
+    conn.commit()
+    conn.close()
+
+    st.success(
+        "Tabele zostały utworzone"
+    )
+`
+
 import sqlite3
 
 conn = sqlite3.connect("typer.db")
