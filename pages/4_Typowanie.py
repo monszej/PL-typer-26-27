@@ -23,8 +23,6 @@ conn = get_conn()
 
 matches = get_matches("SCHEDULED")
 
-st.write("Liczba meczów:", len(matches))
-
 if not matches:
     st.warning("Brak meczów do wyświetlenia.")
     st.stop()
@@ -33,7 +31,7 @@ if not matches:
 matchdays = sorted(
     list(
         set(
-            match["matchday"]
+            match.get("matchday")
             for match in matches
             if match.get("matchday")
         )
@@ -50,13 +48,17 @@ selected_matchday = st.selectbox(
     index=0
 )
 
+# Filtrowanie po kolejce
 matches = [
     match
     for match in matches
-    if match.get("matchday") == selected_matchday
+    if str(match.get("matchday")) == str(selected_matchday)
 ]
 
 st.subheader(f"🏆 Kolejka {selected_matchday}")
+
+if len(matches) == 0:
+    st.warning("Brak meczów w tej kolejce.")
 
 for match in matches:
 
@@ -65,4 +67,42 @@ for match in matches:
     home = match["homeTeam"]["shortName"]
     away = match["awayTeam"]["shortName"]
 
-    home_logo = match["homeTeam"].get
+    home_logo = match["homeTeam"].get("crest")
+    away_logo = match["awayTeam"].get("crest")
+
+    kickoff = datetime.fromisoformat(
+        match["utcDate"].replace("Z", "+00:00")
+    )
+
+    now = datetime.now(timezone.utc)
+
+    existing_prediction = get_prediction(
+        username,
+        match_id
+    )
+
+    if existing_prediction:
+        default_home = existing_prediction[0]
+        default_away = existing_prediction[1]
+    else:
+        default_home = 0
+        default_away = 0
+
+    st.divider()
+
+    col_logo1, col_title, col_logo2 = st.columns(
+        [1, 2, 1]
+    )
+
+    with col_logo1:
+        if home_logo:
+            st.image(home_logo, width=70)
+
+    with col_title:
+        st.subheader(
+            f"{home} vs {away}"
+        )
+
+    with col_logo2:
+        if away_logo:
+            st.image(away
