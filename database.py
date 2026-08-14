@@ -2,20 +2,21 @@ import sqlite3
 
 
 def get_conn():
+
     conn = sqlite3.connect(
         "typer.db",
         check_same_thread=False
     )
 
-   conn.execute(
-    """
-    CREATE TABLE IF NOT EXISTS users(
-        username TEXT PRIMARY KEY,
-        password TEXT,
-        is_admin INTEGER DEFAULT 0
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS users(
+            username TEXT PRIMARY KEY,
+            password TEXT,
+            is_admin INTEGER DEFAULT 0
+        )
+        """
     )
-    """
-)
 
     conn.execute(
         """
