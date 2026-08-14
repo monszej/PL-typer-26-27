@@ -66,4 +66,31 @@ username = st.text_input("Użytkownik")
 
 password = st.text_input(
     "Hasło",
-    type="
+    type="password"
+)
+
+if st.button("Zaloguj"):
+
+    if verify_user(
+        username,
+        password
+    ):
+
+        st.session_state.logged_in = True
+        st.session_state.username = username
+
+        cookies["username"] = username
+
+        cookies.save()
+
+        st.success(
+            f"Witaj {username}"
+        )
+
+        st.rerun()
+
+    else:
+
+        st.error(
+            "Błędny login lub hasło"
+        )
