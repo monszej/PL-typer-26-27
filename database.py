@@ -7,14 +7,15 @@ def get_conn():
         check_same_thread=False
     )
 
-    conn.execute(
-        """
-        CREATE TABLE IF NOT EXISTS users(
-            username TEXT PRIMARY KEY,
-            password TEXT
-        )
-        """
+   conn.execute(
+    """
+    CREATE TABLE IF NOT EXISTS users(
+        username TEXT PRIMARY KEY,
+        password TEXT,
+        is_admin INTEGER DEFAULT 0
     )
+    """
+)
 
     conn.execute(
         """
