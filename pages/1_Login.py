@@ -17,7 +17,7 @@ if not cookies.ready():
     st.stop()
 
 create_users_table()
-ensure_admin_exists()
+# ensure_admin_exists()
 
 # Administrator
 
