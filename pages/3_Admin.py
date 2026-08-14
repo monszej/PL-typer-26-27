@@ -46,16 +46,22 @@ new_password = st.text_input(
 
 if st.button("Dodaj użytkownika"):
 
-    if len(new_password) < 6:
+    if not new_user.strip():
 
         st.error(
-            "Hasło musi mieć minimum 6 znaków"
+            "Podaj nazwę użytkownika"
+        )
+
+    elif not new_password.strip():
+
+        st.error(
+            "Hasło nie może być puste"
         )
 
     else:
 
         add_user(
-            new_user,
+            new_user.strip(),
             new_password,
             0
         )
@@ -75,10 +81,13 @@ for user in users:
     username = user[0]
 
     try:
+
         total_predictions = count_user_predictions(
             username
         )
+
     except Exception:
+
         total_predictions = 0
 
     col1, col2, col3 = st.columns(
@@ -112,4 +121,13 @@ st.divider()
 
 st.subheader("🔐 Reset hasła użytkownika")
 
-users
+users_list = [
+    user[0]
+    for user in users
+    if user[0] != "admin"
+]
+
+if users_list:
+
+    selected_user = st.selectbox(
+  
