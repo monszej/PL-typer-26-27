@@ -9,6 +9,39 @@ from auth import (
 
 st.title("🛠️ Panel Administratora")
 
+import sqlite3
+
+conn = sqlite3.connect("typer.db")
+cursor = conn.cursor()
+
+cursor.execute(
+    "SELECT name FROM sqlite_master WHERE type='table'"
+)
+
+st.write("Tabele:", cursor.fetchall())
+
+cursor.execute(
+    "SELECT * FROM users"
+)
+
+st.write("Users:", cursor.fetchall())
+
+try:
+    cursor.execute(
+        "SELECT * FROM predictions LIMIT 10"
+    )
+
+    st.write(
+        "Predictions:",
+        cursor.fetchall()
+    )
+
+except Exception as e:
+
+    st.write("Predictions error:", e)
+
+conn.close()
+
 if "username" not in st.session_state:
     st.warning("Najpierw się zaloguj.")
     st.stop()
