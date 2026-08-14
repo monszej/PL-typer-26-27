@@ -69,3 +69,25 @@ if st.button("Zmień hasło"):
     else:
 
         change_password(
+            username,
+            new_password.strip()
+        )
+
+        st.success(
+            "✅ Hasło zostało zmienione"
+        )
+
+st.divider()
+
+st.subheader("🚪 Wylogowanie")
+
+if st.button("Wyloguj"):
+
+    if cookies.get("username"):
+        del cookies["username"]
+
+    cookies.save()
+
+    st.session_state.clear()
+
+    st.rerun()
