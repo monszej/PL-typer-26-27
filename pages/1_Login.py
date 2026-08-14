@@ -16,32 +16,13 @@ cookies = EncryptedCookieManager(
 if not cookies.ready():
     st.stop()
 
+# Utworzenie tabel i admina
 create_users_table()
-from auth import add_user
-
-if st.button("Utwórz administratora"):
-
-    add_user(
-        "admin",
-        "admin123",
-        1
-    )
-
-    st.success(
-        "Administrator został utworzony"
-    )
-# ensure_admin_exists()
-
-# Administrator
-
+ensure_admin_exists()
 
 st.title("🔐 Logowanie")
 
-from auth import get_all_users
-
-st.write("Users:", get_all_users())
-
-# Automatyczne logowanie z cookie
+# Jeśli użytkownik jest zapamiętany
 if cookies.get("username"):
 
     st.session_state.logged_in = True
@@ -85,31 +66,4 @@ username = st.text_input("Użytkownik")
 
 password = st.text_input(
     "Hasło",
-    type="password"
-)
-
-if st.button("Zaloguj"):
-
-    if verify_user(
-        username,
-        password
-    ):
-
-        st.session_state.logged_in = True
-        st.session_state.username = username
-
-        cookies["username"] = username
-
-        cookies.save()
-
-        st.success(
-            f"Witaj {username}"
-        )
-
-        st.rerun()
-
-    else:
-
-        st.error(
-            "Błędny login lub hasło"
-        )
+    type="
