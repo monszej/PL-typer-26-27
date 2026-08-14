@@ -105,4 +105,66 @@ for match in matches:
 
     with col_logo2:
         if away_logo:
-            st.image(away
+            st.image(away_logo, width=70)
+
+    st.caption(
+        f"🕒 Start meczu: "
+        f"{kickoff.strftime('%d-%m-%Y %H:%M UTC')}"
+    )
+
+    if now > kickoff:
+
+        st.error(
+            "⛔ Typowanie zamknięte"
+        )
+
+        if existing_prediction:
+            st.info(
+                f"Twój typ: "
+                f"{default_home}:{default_away}"
+            )
+
+        continue
+
+    col1, col2 = st.columns(2)
+
+    home_pred = col1.number_input(
+        home,
+        min_value=0,
+        max_value=20,
+        value=default_home,
+        key=f"home_{match_id}"
+    )
+
+    away_pred = col2.number_input(
+        away,
+        min_value=0,
+        max_value=20,
+        value=default_away,
+        key=f"away_{match_id}"
+    )
+
+    if st.button(
+        f"💾 Zapisz typ dla {home} vs {away}",
+        key=f"save_{match_id}"
+    ):
+
+        conn.execute(
+            """
+            INSERT OR REPLACE INTO predictions
+            VALUES (?, ?, ?, ?)
+            """,
+            (
+                username,
+                match_id,
+                home_pred,
+                away_pred
+            )
+        )
+
+        conn.commit()
+
+        st.success(
+            f"✅ Zapisano typ: "
+            f"{home} {home_pred}:{away_pred} {away}"
+        )
