@@ -26,7 +26,7 @@ st.title("🔐 Logowanie")
 
 from auth import get_all_users
 
-st.write(get_all_users())
+st.write("Users:", get_all_users())
 
 # Automatyczne logowanie z cookie
 if cookies.get("username"):
