@@ -200,6 +200,40 @@ def ensure_admin_exists():
         cursor.execute(
             """
             INSERT INTO users
+            VALUES (?, ?, ?)
+            """,
+            (
+                "admin",
+                hashed,
+                1
+            )
+        )
+
+        conn.commit()
+
+    conn.close()
+
+    conn = sqlite3.connect("typer.db")
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT username
+        FROM users
+        WHERE username = ?
+        """,
+        ("admin",)
+    )
+
+    admin = cursor.fetchone()
+
+    if not admin:
+
+        hashed = hash_password("admin123")
+
+        cursor.execute(
+            """
+            INSERT INTO users
             (username, password, is_admin)
             VALUES (?, ?, ?)
             """,
