@@ -22,23 +22,28 @@ if "username" not in st.session_state:
 
 username = st.session_state.username
 
-st.write(f"Zalogowany użytkownik: **{username}**")
+st.write(
+    f"Zalogowany użytkownik: **{username}**"
+)
 
 st.subheader("🔒 Zmiana hasła")
 
 old_password = st.text_input(
     "Obecne hasło",
-    type="password"
+    type="password",
+    key="old_password"
 )
 
 new_password = st.text_input(
     "Nowe hasło",
-    type="password"
+    type="password",
+    key="new_password"
 )
 
 confirm_password = st.text_input(
     "Powtórz nowe hasło",
-    type="password"
+    type="password",
+    key="confirm_password"
 )
 
 if st.button("Zmień hasło"):
@@ -47,42 +52,20 @@ if st.button("Zmień hasło"):
         username,
         old_password
     ):
-        st.error("Nieprawidłowe obecne hasło")
-
-    elif new_password != confirm_password:
-        st.error("Hasła nie są identyczne")
-
-    elif len(new_password) < 6:
         st.error(
-            "Hasło musi mieć minimum 6 znaków"
+            "Nieprawidłowe obecne hasło"
+        )
+
+    elif new_password.strip() != confirm_password.strip():
+        st.error(
+            "Hasła nie są identyczne"
+        )
+
+    elif not new_password.strip():
+        st.error(
+            "Hasło nie może być puste"
         )
 
     else:
 
         change_password(
-            username,
-            new_password
-        )
-
-        st.success(
-            "✅ Hasło zostało zmienione"
-        )
-
-st.divider()
-
-st.subheader("🚪 Wylogowanie")
-
-if st.button("Wyloguj"):
-
-    if cookies.get("username"):
-        del cookies["username"]
-
-    cookies.save()
-
-    st.session_state.clear()
-
-    st.success(
-        "✅ Zostałeś wylogowany"
-    )
-
-    st.rerun()
