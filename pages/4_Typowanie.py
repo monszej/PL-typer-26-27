@@ -23,6 +23,8 @@ conn = get_conn()
 
 matches = get_matches("SCHEDULED")
 
+st.write("Liczba meczów:", len(matches))
+
 if not matches:
     st.warning("Brak meczów do wyświetlenia.")
     st.stop()
