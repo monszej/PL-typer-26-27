@@ -17,6 +17,19 @@ if not cookies.ready():
     st.stop()
 
 create_users_table()
+from auth import add_user
+
+if st.button("Utwórz administratora"):
+
+    add_user(
+        "admin",
+        "admin123",
+        1
+    )
+
+    st.success(
+        "Administrator został utworzony"
+    )
 # ensure_admin_exists()
 
 # Administrator
