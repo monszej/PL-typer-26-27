@@ -152,30 +152,4 @@ else:
 
 import pandas as pd
 
-if st.button("📥 Eksport użytkowników"):
 
-    users = get_all_users()
-
-    df = pd.DataFrame(
-        users,
-        columns=["username"]
-    )
-
-    st.download_button(
-        "Pobierz CSV",
-        df.to_csv(index=False),
-        "users_backup.csv",
-        "text/csv"
-    )
-
-cursor.execute(
-    """
-    SELECT username,
-           COUNT(*)
-    FROM predictions
-    GROUP BY username
-    ORDER BY username
-    """
-)
-
-st.write(cursor.fetchall())
