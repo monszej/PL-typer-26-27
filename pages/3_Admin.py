@@ -152,4 +152,19 @@ else:
 
 import pandas as pd
 
+import sqlite3
+import pandas as pd
 
+conn = sqlite3.connect("typer.db")
+
+df = pd.read_sql_query(
+    """
+    SELECT *
+    FROM predictions
+    """,
+    conn
+)
+
+st.dataframe(df)
+
+conn.close()
