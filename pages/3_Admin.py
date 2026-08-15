@@ -167,3 +167,16 @@ if st.button("📥 Eksport użytkowników"):
         "users_backup.csv",
         "text/csv"
     )
+
+import sqlite3
+
+conn = sqlite3.connect("typer.db")
+cursor = conn.cursor()
+
+cursor.execute(
+    "SELECT username, COUNT(*) FROM predictions GROUP BY username"
+)
+
+st.write(cursor.fetchall())
+
+conn.close()
