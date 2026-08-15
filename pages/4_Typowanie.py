@@ -168,3 +168,10 @@ for match in matches:
             f"✅ Zapisano typ: "
             f"{home} {home_pred}:{away_pred} {away}"
         )
+
+matches = get_matches("SCHEDULED")
+
+st.write(
+    "Liczba pobranych meczów:",
+    len(matches)
+)
