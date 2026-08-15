@@ -164,3 +164,17 @@ else:
     st.info(
         "Brak użytkowników do resetu hasła."
     )
+
+import sqlite3
+
+conn = sqlite3.connect("typer.db")
+cursor = conn.cursor()
+
+cursor.execute("SELECT COUNT(*) FROM users")
+
+st.write(
+    "Liczba użytkowników:",
+    cursor.fetchone()[0]
+)
+
+conn.close()
