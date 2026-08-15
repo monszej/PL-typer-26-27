@@ -20,7 +20,6 @@ if st.session_state.username != "admin":
     st.error("Brak uprawnień.")
     st.stop()
 
-# Naprawa bazy
 if st.button("🔧 Napraw bazę"):
 
     conn = get_conn()
@@ -72,4 +71,35 @@ if st.button("Dodaj użytkownika"):
 
         st.rerun()
 
-st
+st.divider()
+
+st.subheader("👥 Użytkownicy")
+
+users = get_all_users()
+
+for user in users:
+
+    username = user[0]
+
+    try:
+        total_predictions = count_user_predictions(
+            username
+        )
+    except Exception:
+        total_predictions = 0
+
+    col1, col2, col3 = st.columns(
+        [4, 2, 2]
+    )
+
+    col1.write(f"👤 {username}")
+    col2.write(f"Typy: {total_predictions}")
+
+    if username != "admin":
+
+        if col3.button(
+            "🗑 Usuń",
+            key=f"del_{username}"
+        ):
+
+            
