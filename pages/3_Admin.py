@@ -1,3 +1,5 @@
+import os
+import sqlite3
 import streamlit as st
 
 from auth import (
@@ -81,13 +83,10 @@ for user in users:
     username = user[0]
 
     try:
-
         total_predictions = count_user_predictions(
             username
         )
-
     except Exception:
-
         total_predictions = 0
 
     col1, col2, col3 = st.columns(
@@ -143,46 +142,3 @@ if users_list:
     if st.button("Resetuj hasło"):
 
         if not reset_password.strip():
-
-            st.error(
-                "Hasło nie może być puste"
-            )
-
-        else:
-
-            admin_reset_password(
-                selected_user,
-                reset_password
-            )
-
-            st.success(
-                f"✅ Hasło użytkownika {selected_user} zostało zmienione."
-            )
-
-else:
-
-    st.info(
-        "Brak użytkowników do resetu hasła."
-    )
-
-import sqlite3
-
-conn = sqlite3.connect("typer.db")
-cursor = conn.cursor()
-
-cursor.execute("SELECT COUNT(*) FROM users")
-
-st.write(
-    "Liczba użytkowników:",
-    cursor.fetchone()[0]
-)
-
-conn.close()
-
-import os
-2
- 
-3
-st.write("Baza:", os.path.abspath("typer.db"))
-
-st.write("Plik istnieje:", os.path.exists("typer.db"))
