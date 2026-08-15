@@ -92,8 +92,13 @@ for user in users:
         [4, 2, 2]
     )
 
-    col1.write(f"👤 {username}")
-    col2.write(f"Typy: {total_predictions}")
+    col1.write(
+        f"👤 {username}"
+    )
+
+    col2.write(
+        f"Typy: {total_predictions}"
+    )
 
     if username != "admin":
 
@@ -102,4 +107,22 @@ for user in users:
             key=f"del_{username}"
         ):
 
-            
+            delete_user(username)
+
+            st.success(
+                f"Usunięto użytkownika: {username}"
+            )
+
+            st.rerun()
+
+st.divider()
+
+st.subheader("🔐 Reset hasła użytkownika")
+
+users_list = [
+    user[0]
+    for user in users
+    if user[0] != "admin"
+]
+
+if users
