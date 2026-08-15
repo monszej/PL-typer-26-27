@@ -180,3 +180,15 @@ cursor.execute(
 st.write(cursor.fetchall())
 
 conn.close()
+
+cursor.execute(
+    """
+    SELECT username,
+           COUNT(*)
+    FROM predictions
+    GROUP BY username
+    ORDER BY username
+    """
+)
+
+st.write(cursor.fetchall())
