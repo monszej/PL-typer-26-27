@@ -149,3 +149,21 @@ else:
     st.info(
         "Brak użytkowników do resetu hasła."
     )
+
+import pandas as pd
+
+if st.button("📥 Eksport użytkowników"):
+
+    users = get_all_users()
+
+    df = pd.DataFrame(
+        users,
+        columns=["username"]
+    )
+
+    st.download_button(
+        "Pobierz CSV",
+        df.to_csv(index=False),
+        "users_backup.csv",
+        "text/csv"
+    )
