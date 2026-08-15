@@ -178,3 +178,11 @@ st.write(
 )
 
 conn.close()
+
+import os
+2
+ 
+3
+st.write("Baza:", os.path.abspath("typer.db"))
+
+st.write("Plik istnieje:", os.path.exists("typer.db"))
