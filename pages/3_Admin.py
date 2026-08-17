@@ -9,6 +9,7 @@ from auth import (
 )
 
 from database import get_conn
+from supabase_db import supabase
 
 st.title("🛠️ Panel Administratora")
 
@@ -34,7 +35,9 @@ st.divider()
 
 st.subheader("➕ Dodaj użytkownika")
 
-new_user = st.text_input("Nowy użytkownik")
+new_user = st.text_input(
+    "Nowy użytkownik"
+)
 
 new_password = st.text_input(
     "Hasło",
@@ -45,11 +48,15 @@ if st.button("Dodaj użytkownika"):
 
     if not new_user.strip():
 
-        st.error("Podaj nazwę użytkownika")
+        st.error(
+            "Podaj nazwę użytkownika"
+        )
 
     elif not new_password.strip():
 
-        st.error("Hasło nie może być puste")
+        st.error(
+            "Hasło nie może być puste"
+        )
 
     else:
 
@@ -82,10 +89,17 @@ for user in users:
     except Exception:
         total_predictions = 0
 
-    col1, col2, col3 = st.columns([4, 2, 2])
+    col1, col2, col3 = st.columns(
+        [4, 2, 2]
+    )
 
-    col1.write(f"👤 {username}")
-    col2.write(f"Typy: {total_predictions}")
+    col1.write(
+        f"👤 {username}"
+    )
+
+    col2.write(
+        f"Typy: {total_predictions}"
+    )
 
     if username != "admin":
 
@@ -131,93 +145,4 @@ if users_list:
 
             st.error(
                 "Hasło nie może być puste"
-            )
-
-        else:
-
-            admin_reset_password(
-                selected_user,
-                reset_password
-            )
-
-            st.success(
-                f"✅ Hasło użytkownika {selected_user} zostało zmienione."
-            )
-
-else:
-
-    st.info(
-        "Brak użytkowników do resetu hasła."
-    )
-
-import pandas as pd
-
-import sqlite3
-import pandas as pd
-
-conn = sqlite3.connect("typer.db")
-
-df = pd.read_sql_query(
-    """
-    SELECT *
-    FROM predictions
-    """,
-    conn
-)
-
-st.dataframe(df)
-
-conn.close()
-
-import os
-import sqlite3
-
-st.write(
-    "Baza:",
-    os.path.abspath("typer.db")
-)
-
-st.write(
-    "Rozmiar:",
-    os.path.getsize("typer.db")
-)
-
-import sqlite3
-
-conn = sqlite3.connect("typer.db")
-cursor = conn.cursor()
-
-cursor.execute(
-    """
-    SELECT name
-    FROM sqlite_master
-    WHERE type='table'
-    """
-)
-
-st.write(cursor.fetchall())
-
-conn.close()
-
-import os
-import datetime
-
-st.write(
-    "Modyfikacja bazy:",
-    datetime.datetime.fromtimestamp(
-        os.path.getmtime("typer.db")
-    )
-)
-
-from supabase_db import supabase
-
-if st.button("🧪 Test Supabase"):
-
-    result = (
-        supabase
-        .table("users")
-        .select("*")
-        .execute()
-    )
-
-    st.write(result.data)
+   
