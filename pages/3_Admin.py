@@ -168,3 +168,16 @@ df = pd.read_sql_query(
 st.dataframe(df)
 
 conn.close()
+
+import os
+import sqlite3
+
+st.write(
+    "Baza:",
+    os.path.abspath("typer.db")
+)
+
+st.write(
+    "Rozmiar:",
+    os.path.getsize("typer.db")
+)
