@@ -198,3 +198,14 @@ cursor.execute(
 st.write(cursor.fetchall())
 
 conn.close()
+
+import os
+import datetime
+
+st.write(
+    "Modyfikacja bazy:",
+    datetime.datetime.fromtimestamp(
+        os.path.getmtime("typer.db")
+    )
+)
+
