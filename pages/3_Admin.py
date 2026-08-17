@@ -181,3 +181,20 @@ st.write(
     "Rozmiar:",
     os.path.getsize("typer.db")
 )
+
+import sqlite3
+
+conn = sqlite3.connect("typer.db")
+cursor = conn.cursor()
+
+cursor.execute(
+    """
+    SELECT name
+    FROM sqlite_master
+    WHERE type='table'
+    """
+)
+
+st.write(cursor.fetchall())
+
+conn.close()
