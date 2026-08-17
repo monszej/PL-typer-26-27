@@ -168,11 +168,18 @@ st.divider()
 
 if st.button("🧪 Test Supabase"):
 
-    result = (
-        supabase
-        .table("users")
-        .select("*")
-        .execute()
-    )
+    try:
 
-    st.write(result.data)
+        result = (
+            supabase
+            .table("users")
+            .select("*")
+            .execute()
+        )
+
+        st.success("Połączenie OK")
+        st.write(result.data)
+
+    except Exception as e:
+
+        st.error(str(e))
