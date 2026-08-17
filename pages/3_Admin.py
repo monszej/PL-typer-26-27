@@ -209,3 +209,15 @@ st.write(
     )
 )
 
+from supabase_db import supabase
+
+if st.button("🧪 Test Supabase"):
+
+    result = (
+        supabase
+        .table("users")
+        .select("*")
+        .execute()
+    )
+
+    st.write(result.data)
