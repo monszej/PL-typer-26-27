@@ -145,4 +145,34 @@ if users_list:
 
             st.error(
                 "Hasło nie może być puste"
-   
+            )
+
+        else:
+
+            admin_reset_password(
+                selected_user,
+                reset_password
+            )
+
+            st.success(
+                f"✅ Hasło użytkownika {selected_user} zostało zmienione."
+            )
+
+else:
+
+    st.info(
+        "Brak użytkowników do resetu hasła."
+    )
+
+st.divider()
+
+if st.button("🧪 Test Supabase"):
+
+    result = (
+        supabase
+        .table("users")
+        .select("*")
+        .execute()
+    )
+
+    st.write(result.data)
